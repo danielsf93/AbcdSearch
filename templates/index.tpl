@@ -14,7 +14,9 @@
 <hr>
 {$obterDados|escape}
 
-
+{foreach from=$obterDados item=valor}
+    {$valor|escape}<br>
+{/foreach}
 
 
 <hr>

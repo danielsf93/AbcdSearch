@@ -38,16 +38,19 @@ public function obterDados() {
         $pdo = new PDO("mysql:host=$host;dbname=$db", $usuario, $senha);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $sql = "SELECT DISTINCT setting_value FROM publication_settings WHERE setting_name = 'copyrightHolder'";
+        $sql = "SELECT setting_value FROM publication_settings WHERE setting_name = 'copyrightHolder'";
         $stmt = $pdo->query($sql);
 
-        // Recupera os resultados
-        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Inicializa um array para armazenar os resultados
+        $dados = array();
+
+        // Percorre os resultados
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $dados[] = $row['setting_value'];
+        }
 
         // Verifica se há resultados
-        if (count($resultados) > 0) {
-            // Suponha que a coluna setting_value é uma string
-            $dados = $resultados[0]['setting_value'];
+        if (count($dados) > 0) {
             return $dados;
         } else {
             return "Nenhum resultado encontrado";
@@ -56,6 +59,8 @@ public function obterDados() {
         return "Erro: " . $e->getMessage();
     }
 }
+
+
 
     function getDisplayName() {
 		return __('AbcdSearchPlugin');
