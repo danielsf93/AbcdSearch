@@ -1,4 +1,4 @@
-
+{* plugins/generic/AbcdSearch/templates/index.tpl *}
 
  {include file="frontend/components/header.tpl" pageTitleTranslated=$title}
  
@@ -10,8 +10,8 @@
  <div class="page">
  <hr><h1>Abcd Search</h1>
 
-{$meuTeste|escape}
-{$meuTeste2|escape}
+{$meuTeste|escape}<br>
+{$obterDados|escape}
 
  </div>
  <img src="https://www.abcd.usp.br/wp-content/uploads/2022/07/logo_abcd.png">

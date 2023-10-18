@@ -1,14 +1,10 @@
 <?php
-
-
+//plugins/generic/AbcdSearch/AbcdSearchPluginHandler.inc.php
 
 import('classes.handler.Handler');
 import('lib.pkp.pages.index.PKPIndexHandler');
-
-
-    
+   
 class AbcdSearchPluginHandler extends Handler {
-
 
     public function index($args, $request) {
         $plugin = PluginRegistry::getPlugin('generic', 'abcdsearchplugin');
@@ -18,7 +14,7 @@ class AbcdSearchPluginHandler extends Handler {
         if ($route === 'abcdsearch') {
             // Atribua a variável $meuTeste ao TemplateManager
             $templateMgr->assign('meuTeste', $plugin->meuTeste);
-            $templateMgr->assign('meuTeste2', $plugin->meuTeste2());
+            $templateMgr->assign('obterDados', $plugin->obterDados());
             return $templateMgr->display($plugin->getTemplateResource('index.tpl'));
         }
 
@@ -30,13 +26,3 @@ class AbcdSearchPluginHandler extends Handler {
 
   
 }
-
-
-
-
-
-
-
-
-
-
