@@ -24,7 +24,7 @@ class AbcdSearchPlugin extends GenericPlugin {
     return false;
 }
 //metodo para passar info sem funcao
-public $meuTeste = "olá pessoal auauau";
+public $meuTeste = "Lista de copyrights do portal:";
 
 
 //metodo com funcao, que deve ser resgatado e passado ao arquivo .tpl via handler.inc.php
@@ -38,7 +38,7 @@ public function obterDados() {
         $pdo = new PDO("mysql:host=$host;dbname=$db", $usuario, $senha);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $sql = "SELECT setting_value FROM publication_settings WHERE setting_name = 'copyrightHolder'";
+        $sql = "SELECT DISTINCT setting_value FROM publication_settings WHERE setting_name = 'copyrightHolder'";
         $stmt = $pdo->query($sql);
 
         // Inicializa um array para armazenar os resultados
