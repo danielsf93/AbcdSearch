@@ -14,6 +14,7 @@ class AbcdSearchPluginHandler extends Handler {
         if ($route === 'abcdsearch') {
             // Atribua a variável $meuTeste ao TemplateManager
             $templateMgr->assign('meuTeste', $plugin->meuTeste);
+            //resgatando a funcao do arquivo principal e enviando ao arquivo tpl
             $templateMgr->assign('obterDados', $plugin->obterDados());
             return $templateMgr->display($plugin->getTemplateResource('index.tpl'));
         }

@@ -23,18 +23,38 @@ class AbcdSearchPlugin extends GenericPlugin {
     }
     return false;
 }
-
+//metodo para passar info sem funcao
 public $meuTeste = "olá pessoal auauau";
 
-	
+
+//metodo com funcao, que deve ser resgatado e passado ao arquivo .tpl via handler.inc.php
 public function obterDados() {
-    $palavra01 = "bom";
-    $palavra02 = "dia";
-    $hora = date('H:i:s'); // Obtém a hora em PHP
+    $host = 'localhost';
+    $db = 'ompbb';
+    $usuario = 'admin';
+    $senha = 'admin';
 
-    $dados = $palavra01 . ' ' . $palavra02 . ' - ' . $hora;
+    try {
+        $pdo = new PDO("mysql:host=$host;dbname=$db", $usuario, $senha);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    return $dados;
+        $sql = "SELECT DISTINCT setting_value FROM publication_settings WHERE setting_name = 'copyrightHolder'";
+        $stmt = $pdo->query($sql);
+
+        // Recupera os resultados
+        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Verifica se há resultados
+        if (count($resultados) > 0) {
+            // Suponha que a coluna setting_value é uma string
+            $dados = $resultados[0]['setting_value'];
+            return $dados;
+        } else {
+            return "Nenhum resultado encontrado";
+        }
+    } catch (PDOException $e) {
+        return "Erro: " . $e->getMessage();
+    }
 }
 
     function getDisplayName() {
