@@ -63,7 +63,7 @@ public function obterDados() {
 
 
     function getDisplayName() {
-		return __('AbcdSearchPlugin');
+		return __('plugins.generic.abcdsearch.displayName');
 	}
 
 	/**
@@ -71,7 +71,7 @@ public function obterDados() {
 	 */
 	function getDescription() {
 		
-		return __('AbcdSearchPlugin');
+		return __('plugins.generic.abcdsearch.description');
 	}
 
 }
