@@ -5,17 +5,19 @@
 
 
  <div class="page">
- <h1>Abcd Search</h1>
-
-{$meuTeste|escape}<br>
+ <h1>{$meuTeste|escape}</h1>
 
 
 
-<hr>
+
+
+
 {$obterDados|escape}
 
 {foreach from=$obterDados item=valor}
-    {$valor|escape}<br>
+    <a href="{url page="copyrightSearch" router=$smarty.const.ROUTE_PAGE}/?query={$valor}">{$valor}</a><br>
+
+    
 {/foreach}
 
 
