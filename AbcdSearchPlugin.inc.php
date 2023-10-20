@@ -1,77 +1,86 @@
 <?php
-///plugins/generic/AbcdSearch/AbcdSearchPlugin.inc.php
+//plugins/generic/AbcdSearch/AbcdSearchPlugin.inc.php
 import('lib.pkp.classes.plugins.GenericPlugin');
 import('lib.pkp.plugins.importexport.users.PKPUserImportExportPlugin');
 
 class AbcdSearchPlugin extends GenericPlugin {
-	
-	public function register($category, $path, $mainContextId = null) {
-		$success = parent::register($category, $path, $mainContextId);
-		if ($success && $this->getEnabled()) {
-			HookRegistry::register('LoadHandler', array($this, 'setPageHandler'));
-		}
-		return $success;
-  }
-  public function setPageHandler($hookName, $params) {
-    $page = $params[0];
-    if ($page === 'abcdsearch') {
-        $this->import('AbcdSearchPluginHandler');
-        define('HANDLER_CLASS', 'AbcdSearchPluginHandler');
-        return true;
+    //variaveis do banco de dados
+    private $databaseHost;
+    private $databaseName;
+    private $databaseUsername;
+    private $databasePassword;
 
-		
-    }
-    return false;
-}
-//metodo para passar info sem funcao
-public $meuTeste = "Lista de copyrights do portal:";
-
-
-//metodo com funcao, que deve ser resgatado e passado ao arquivo .tpl via handler.inc.php
-public function obterDados() {
-    $host = 'localhost';
-    $db = 'ompbb';
-    $usuario = 'admin';
-    $senha = 'admin';
-
-    try {
-        $pdo = new PDO("mysql:host=$host;dbname=$db", $usuario, $senha);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        $sql = "SELECT DISTINCT setting_value FROM publication_settings WHERE setting_name = 'copyrightHolder'";
-        $stmt = $pdo->query($sql);
-
-        // Inicializa um array para armazenar os resultados
-        $dados = array();
-
-        // Percorre os resultados
-        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            $dados[] = $row['setting_value'];
+    public function register($category, $path, $mainContextId = null) {
+        $success = parent::register($category, $path, $mainContextId);
+        if ($success && $this->getEnabled()) {
+            HookRegistry::register('LoadHandler', array($this, 'setPageHandler'));
         }
 
-        // Verifica se há resultados
-        if (count($dados) > 0) {
-            return $dados;
-        } else {
-            return "Nenhum resultado encontrado";
+        // Carregar as configurações do banco de dados a partir do arquivo config.inc.php
+        $configFile = 'config.inc.php';
+
+        if (file_exists($configFile)) {
+            $config = parse_ini_file($configFile, true);
+
+            if (isset($config['database'])) {
+                $this->databaseHost = $config['database']['host'];
+                $this->databaseName = $config['database']['name'];
+                $this->databaseUsername = $config['database']['username'];
+                $this->databasePassword = $config['database']['password'];
+            }
         }
-    } catch (PDOException $e) {
-        return "Erro: " . $e->getMessage();
+
+        return $success;
     }
-}
 
+    //montando a página
+    public function setPageHandler($hookName, $params) {
+        $page = $params[0];
+        if ($page === 'abcdsearch') {
+            $this->import('AbcdSearchPluginHandler');
+            define('HANDLER_CLASS', 'AbcdSearchPluginHandler');
+            return true;
+        }
+        return false;
+    }
 
+    // Método para passar informações sem função
+    public $meuTeste = "Lista de copyrights do portal:";
+
+    // Método com função, que deve ser resgatado e passado ao arquivo .tpl via handler.inc.php
+    public function obterDados() {
+        try {
+            $pdo = new PDO("mysql:host={$this->databaseHost};dbname={$this->databaseName}", $this->databaseUsername, $this->databasePassword);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            //DISTINCT obtem a lista de copyrights evitando repetição
+            $sql = "SELECT DISTINCT setting_value FROM publication_settings WHERE setting_name = 'copyrightHolder'";
+            $stmt = $pdo->query($sql);
+
+            // Inicializa um array para armazenar os resultados
+            $dados = array();
+
+            // Percorre os resultados
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                $dados[] = $row['setting_value'];
+            }
+
+            // Verifica se há resultados
+            if (count($dados) > 0) {
+                return $dados;
+            } else {
+                return "Nenhum resultado encontrado";
+            }
+        } catch (PDOException $e) {
+            return "Erro: " . $e->getMessage();
+        }
+    }
 
     function getDisplayName() {
-		return __('plugins.generic.abcdsearch.displayName');
-	}
+        return __('plugins.generic.abcdsearch.displayName');
+    }
 
-	/**
-	 * @copydoc Plugin::getDescription()
-	 */
-	function getDescription() {
-		
-		return __('plugins.generic.abcdsearch.description');
-	}
-
+    function getDescription() {
+        return __('plugins.generic.abcdsearch.description');
+    }
 }
