@@ -52,19 +52,24 @@ class AbcdSearchPlugin extends GenericPlugin {
         try {
             $pdo = new PDO("mysql:host={$this->databaseHost};dbname={$this->databaseName}", $this->databaseUsername, $this->databasePassword);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            //DISTINCT obtem a lista de copyrights evitando repetição
+    
+            // DISTINCT obtem a lista de copyrights evitando repetição
             $sql = "SELECT DISTINCT setting_value FROM publication_settings WHERE setting_name = 'copyrightHolder'";
             $stmt = $pdo->query($sql);
-
+    
             // Inicializa um array para armazenar os resultados
             $dados = array();
-
+    
             // Percorre os resultados
             foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-                $dados[] = $row['setting_value'];
+                $settingValue = $row['setting_value'];
+                
+                // Remove "Universidade de São Paulo. " da string
+                $settingValue = str_replace("Universidade de São Paulo. ", "", $settingValue);
+    
+                $dados[] = $settingValue;
             }
-
+    
             // Verifica se há resultados
             if (count($dados) > 0) {
                 return $dados;
