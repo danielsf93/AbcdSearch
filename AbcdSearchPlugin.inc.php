@@ -54,7 +54,7 @@ class AbcdSearchPlugin extends GenericPlugin {
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
             // DISTINCT obtem a lista de copyrights evitando repetição
-            $sql = "SELECT DISTINCT setting_value FROM publication_settings WHERE setting_name = 'copyrightHolder'";
+            $sql = "SELECT DISTINCT setting_value FROM publication_settings WHERE CONVERT(setting_name USING utf8)= 'copyrightHolder'";
             $stmt = $pdo->query($sql);
     
             // Inicializa um array para armazenar os resultados
