@@ -45,7 +45,7 @@ class AbcdSearchPlugin extends GenericPlugin {
     }
 
     // Método para passar informações sem função
-    public $meuTeste = "Lista de copyrights do portal:";
+    //public $meuTeste = "Lista de copyrights do portal:";
 
     // Método com função, que deve ser resgatado e passado ao arquivo .tpl via handler.inc.php
     public function obterDados() {
