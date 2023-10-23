@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <primary_locale>pt_BR</primary_locale>
+  <plugin
+    id="AbcdSearch"
+    system="3.3.0-8"
+    package="AbcdSearch"
+    directory="AbcdSearch"
+    name="AbcdSearch"
+    description="Page with list of books by unit. This plugin directly depends on the 'Copyright Search Page' plugin to work. Once installed, the page can be accessed at site.com/index.php/editora/abcdsearch"
+    version="2.0.0"
+    date="2023-10-23"
+    author="Daniel Silva Ferreira"
+    email="daniel.ferreira@abcd.usp.br"
+    url="https://github.com/danielsf93/AbcdSearch"
+  >
+  </plugin>
+</manifest>
