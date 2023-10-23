@@ -19,3 +19,6 @@ msgstr "AbcdSearch"
 
 msgid "plugins.generic.abcdsearch.description"
 msgstr "Página com lista de copyrights da editora, via sql"
+
+msgid "plugins.generic.abcdsearch.pagetitle"
+msgstr "Livros por Unidade:"
