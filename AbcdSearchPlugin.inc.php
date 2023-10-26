@@ -50,11 +50,11 @@ class AbcdSearchPlugin extends GenericPlugin {
     // Método com função, que deve ser resgatado e passado ao arquivo .tpl via handler.inc.php
     public function obterDados() {
         try {
-            $pdo = new PDO("mysql:host={$this->databaseHost};dbname={$this->databaseName}", $this->databaseUsername, $this->databasePassword);
+            $pdo = new PDO("mysql:host={$this->databaseHost};dbname={$this->databaseName};charset=utf8", $this->databaseUsername, $this->databasePassword);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
             // DISTINCT obtem a lista de copyrights evitando repetição
-            $sql = "SELECT DISTINCT setting_value FROM publication_settings WHERE CONVERT(setting_name USING utf8)= 'copyrightHolder'";
+            $sql = "SELECT DISTINCT CONVERT(setting_value USING utf8) as utf8_value FROM publication_settings WHERE CONVERT(setting_name USING utf8) = 'copyrightHolder'";
             $stmt = $pdo->query($sql);
     
             // Inicializa um array para armazenar os resultados
@@ -62,13 +62,16 @@ class AbcdSearchPlugin extends GenericPlugin {
     
             // Percorre os resultados
             foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-                $settingValue = $row['setting_value'];
-                
+                $settingValue = $row['utf8_value'];
+    
                 // Remove "Universidade de São Paulo. " da string
                 $settingValue = str_replace("Universidade de São Paulo. ", "", $settingValue);
     
                 $dados[] = $settingValue;
             }
+    
+            // Ordenar os resultados em ordem alfabética
+            sort($dados);
     
             // Verifica se há resultados
             if (count($dados) > 0) {
@@ -80,6 +83,7 @@ class AbcdSearchPlugin extends GenericPlugin {
             return "Erro: " . $e->getMessage();
         }
     }
+    
 
     function getDisplayName() {
         return __('plugins.generic.abcdsearch.displayName');
